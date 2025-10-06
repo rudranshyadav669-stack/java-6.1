@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SumWithAutoboxing {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Integer> numberList = new ArrayList<>();
+
+        System.out.println("Enter integers (type 'done' to finish):");
+
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("done")) {
+                break;
+            }
+            try {
+                int number = Integer.parseInt(input);
+                numberList.add(number);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer or 'done' to finish.");
+            }
+        }
+
+        int sum = 0;
+        for (Integer num : numberList) {
+            sum += num;
+        }
+
+        System.out.println("Sum of entered integers: " + sum);
+        scanner.close();
+    }
+}
