@@ -1,0 +1,80 @@
+//Employee.java
+
+import java.io.Serializable;
+
+public class Employee implements Serializable {
+    int id;
+    String name;
+    String designation;
+    double salary;
+
+    public Employee(int id, String name, String designation, double salary) {
+        this.id = id;
+        this.name = name;
+        this.designation = designation;
+        this.salary = salary;
+    }
+}
+
+//EmployeeManager.java
+
+import java.io.*;
+import java.util.*;
+
+public class EmployeeManager {
+    static final String FILE_NAME = "employees.dat";
+
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n1. Add Employee");
+            System.out.println("2. Display All Employees");
+            System.out.println("3. Exit");
+            System.out.print("Enter choice: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            if (choice == 1) {
+                System.out.print("Enter ID: ");
+                int id = Integer.parseInt(scanner.nextLine());
+                System.out.print("Enter Name: ");
+                String name = scanner.nextLine();
+                System.out.print("Enter Designation: ");
+                String designation = scanner.nextLine();
+                System.out.print("Enter Salary: ");
+                double salary = Double.parseDouble(scanner.nextLine());
+
+                Employee emp = new Employee(id, name, designation, salary);
+                appendEmployee(emp);
+            } else if (choice == 2) {
+                List<Employee> employees = readEmployees();
+                for (Employee e : employees) {
+                    System.out.println("ID: " + e.id + ", Name: " + e.name + ", Designation: " + e.designation + ", Salary: " + e.salary);
+                }
+            } else if (choice == 3) {
+                System.out.println("Exiting...");
+                break;
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+        scanner.close();
+    }
+
+    static void appendEmployee(Employee emp) throws Exception {
+        List<Employee> list = readEmployees();
+        list.add(emp);
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
+        out.writeObject(list);
+        out.close();
+    }
+
+    static List<Employee> readEmployees() throws Exception {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return new ArrayList<>();
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME));
+        List<Employee> list = (List<Employee>) in.readObject();
+        in.close();
+        return list;
+    }
+
+}
